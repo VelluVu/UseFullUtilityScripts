@@ -24,6 +24,8 @@ public class GameController : MonoBehaviour
     public AudioSource sound_audioSource;
     public AudioSource music_audioSource;
 
+    public GameMode gameMode;
+
     private void Awake ( )
     {
         MakeSingleton ( );   

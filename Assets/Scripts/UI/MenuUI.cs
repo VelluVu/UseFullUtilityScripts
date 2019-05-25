@@ -18,9 +18,11 @@ public class MenuUI : MonoBehaviour
 
     void StartGame ( )
     {
-        UIController.instance.ActivateUIElement ( UIElements.MenuUI );     
-        UIController.instance.ActivateUIElement ( UIElements.StartButton );
-        SceneLoader.instance.SetSceneToLoad ( SceneNames.GameScene );
+        UIController.instance.ActivateUIElement ( UIElements.MenuUI );
+        UIController.instance.ActivateUIElement ( UIElements.LobbyUI );
+        //PhotonNetwork.JoinLobby ( );
+        
+        //SceneLoader.instance.SetSceneToLoad ( SceneNames.GameScene );
     }
 
     void Options ( )

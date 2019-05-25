@@ -13,6 +13,8 @@ public enum UIElements
     MenuButton,
     StartButton,
     Loading,
+    LobbyUI,
+    RoomUI,
 }
 
 public enum Sound
@@ -34,4 +36,17 @@ public enum Music
     Theme,
     Battle,
 
+}
+
+public enum ObjectType
+{
+    CriticalObject,
+    StandardObject,
+}
+
+public enum GameMode
+{
+    Tutorial,
+    Training,
+    Exam,
 }
