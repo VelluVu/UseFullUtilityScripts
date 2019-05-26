@@ -1,4 +1,9 @@
 ﻿
+/// <summary>
+/// @Author = Veli-Matti Vuoti
+/// 
+/// </summary>
+
 public enum SceneNames
 {
     LoadingScene = 0,

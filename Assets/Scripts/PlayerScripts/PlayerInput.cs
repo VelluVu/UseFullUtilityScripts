@@ -2,9 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// @Author = Veli-Matti Vuoti
+/// 
+/// </summary>
 public class PlayerInput : MonoBehaviour
 {
     PlayerControl player;
+    public bool lockRotation;
 
     private void Start ( )
     {
@@ -19,8 +24,26 @@ public class PlayerInput : MonoBehaviour
         float mouseY = Input.GetAxis ( "Mouse Y" );
 
         player.movement.DirectionalMove ( horizontalMove, verticalMove );
-        player.movement.RotationalMove ( mouseX, mouseY );
 
+        if ( !lockRotation )
+        {
+            player.movement.RotationalMove ( mouseX, mouseY );
+        }
+        
+
+        if( Input.GetButton("Fire3"))
+        {
+            lockRotation = true;
+        }
+        if ( Input.GetButtonUp ( "Fire3" ) )
+        {
+            lockRotation = false;
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            player.PCTeleport ( );
+        }
 
 
     }

@@ -2,13 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// @Author = Veli-Matti Vuoti
+/// 
+/// </summary>
 public class PlayerControl : MonoBehaviour
 {
     [HideInInspector] public PlayerMovement movement;
     [HideInInspector] public PlayerEyes playerEyes;
+    Transform rightHand;
+    Transform leftHand;
+    FixedJoint objSnapPoint;
 
     [Range ( 0, 15 )] public float rayCastDistance;
     public LayerMask hitMask;
+    public LayerMask teleportMask;
     Camera eyeSight;
     RayCastData newHitData;
 
@@ -28,6 +36,9 @@ public class PlayerControl : MonoBehaviour
         movement = gameObject.GetComponent<PlayerMovement> ( );
         playerEyes = gameObject.GetComponentInChildren<PlayerEyes> ( );
         eyeSight = playerEyes.gameObject.GetComponent<Camera> ( );
+        leftHand = gameObject.transform.GetChild ( 1 );
+        rightHand = gameObject.transform.GetChild ( 2 );
+        objSnapPoint = rightHand.GetComponent<FixedJoint> ( );
 
         RayCastData newHitData = new RayCastData ( );
         newHitData.distance = 0;
@@ -78,11 +89,20 @@ public class PlayerControl : MonoBehaviour
                     Debug.Log ( "SELECTED OBJECT" );
                     MouseClicked ( hit );
                     selectedObject = hit.transform.gameObject;
+                    if (hit.distance <= 2f)
+                    {
+                        Debug.Log ( "PICKED UP THE OBJECT" );
+                        hit.transform.position = rightHand.position;
+                        objSnapPoint.connectedBody = hit.rigidbody;
+                        objSnapPoint.connectedBody.useGravity = false;
+                    }
                 }
                 else if ( Input.GetMouseButtonDown ( 0 ) && selectedObject == hoveredGameObject && selectedObject != null && hasObjSelected )
                 {
                     Debug.Log ( "DESELECTED OBJECT" );
                     selectedObject = null;
+
+                    DropObject ( );
                 }
             }
             else
@@ -94,8 +114,8 @@ public class PlayerControl : MonoBehaviour
                 hoveredGameObject = hit.transform.gameObject;
                 MouseHover ( hit );
 
-                if (Input.GetMouseButtonDown(0) && senderActive)
-                {                  
+                if ( Input.GetMouseButtonDown ( 0 ) && senderActive )
+                {
                     MouseClicked ( hit );
                 }
 
@@ -104,13 +124,15 @@ public class PlayerControl : MonoBehaviour
         else
         {
             MouseExited ( hit );
-            
+
             if ( Input.GetMouseButtonDown ( 0 ) && selectedObject != null )
             {
                 Debug.Log ( "DESELECTED OBJECT" );
                 selectedObject.AddComponent<InteractableObject> ( ).selected = false;
                 ExtensionMethods.ChangeColor ( selectedObject, Color.white );
                 selectedObject = null;
+
+                DropObject ( );
             }
 
             senderActive = false;
@@ -119,7 +141,7 @@ public class PlayerControl : MonoBehaviour
 
     }
 
-    public void MouseHover(RaycastHit hit)
+    public void MouseHover ( RaycastHit hit )
     {
         if ( mouseHoverIn != null && senderActive )
         {
@@ -130,7 +152,7 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
-    public void MouseClicked(RaycastHit hit)
+    public void MouseClicked ( RaycastHit hit )
     {
         if ( mouseClick != null && senderActive )
         {
@@ -141,7 +163,7 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
-    public void MouseExited(RaycastHit hit)
+    public void MouseExited ( RaycastHit hit )
     {
         if ( mouseHoverOut != null && senderActive )
         {
@@ -150,6 +172,30 @@ public class PlayerControl : MonoBehaviour
             newHitData.target = hoveredGameObject.transform;
             mouseHoverOut ( this, newHitData );
         }
+    }
+
+    public void DropObject()
+    {
+        if ( objSnapPoint.connectedBody != null )
+        {
+            Debug.Log ( "DROPPED OBJECT" );
+            objSnapPoint.connectedBody.useGravity = true;
+            objSnapPoint.connectedBody = null;
+        }
+    }
+
+    public void PCTeleport ( )
+    {
+        RaycastHit hit;
+
+        Ray ray = eyeSight.ScreenPointToRay ( Input.mousePosition );
+        bool rayHit = Physics.Raycast ( ray, out hit, rayCastDistance, teleportMask );
+
+        if ( rayHit )
+        {
+            transform.position = hit.point;
+        }
+
     }
 }
 

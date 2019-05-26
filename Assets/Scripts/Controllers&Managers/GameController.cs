@@ -1,6 +1,10 @@
 ﻿using Sirenix.OdinInspector;
 using UnityEngine;
 
+/// <summary>
+/// @Author = Veli-Matti Vuoti
+/// 
+/// </summary>
 public class GameController : MonoBehaviour
 {
 

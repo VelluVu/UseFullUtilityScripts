@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/// <summary>
+/// @Author = Veli-Matti Vuoti
+/// 
+/// </summary>
 public class UIInput : MonoBehaviour
 {
     
