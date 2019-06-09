@@ -6,7 +6,7 @@ using UnityEngine;
 /// @Author = Veli-Matti Vuoti
 /// 
 /// </summary>
-public class PlayerControl : MonoBehaviour
+public class PlayerControl : MonoBehaviour, ISaveablePlayer
 {
     [HideInInspector] public PlayerMovement movement;
     [HideInInspector] public PlayerEyes playerEyes;
@@ -196,6 +196,11 @@ public class PlayerControl : MonoBehaviour
             transform.position = hit.point;
         }
 
+    }
+
+    public void MyPosition ( SaveData saveStorage )
+    {
+        saveStorage.playerPosition =  transform.position;
     }
 }
 

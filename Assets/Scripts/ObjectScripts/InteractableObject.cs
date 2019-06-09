@@ -6,7 +6,7 @@ using UnityEngine;
 /// @Author = Veli-Matti Vuoti
 /// 
 /// </summary>
-public class InteractableObject : MonoBehaviour
+public class InteractableObject : MonoBehaviour, ISaveAbleObject
 {
 
     [SerializeField] Color hoveringColor;
@@ -125,5 +125,15 @@ public class InteractableObject : MonoBehaviour
                 ExtensionMethods.ChangeColor ( gameObject, Color.white );
             }
         }
+    }
+
+    public void MyType ( SaveData saveStorage )
+    {
+        saveStorage.objectTypes.Add ( objectType );
+    }
+
+    public void MyPosition ( SaveData saveStorage )
+    {
+        saveStorage.objectPositions.Add ( transform.position );
     }
 }
